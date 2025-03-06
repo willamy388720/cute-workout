@@ -1,36 +1,25 @@
-import { SPACING } from "@themes/default";
-import styled, { css } from "styled-components";
+import {
+  Box,
+  BoxProps,
+  Container,
+  ContainerProps,
+  Flex,
+  FlexProps,
+  Grid,
+  GridProps,
+  Section,
+  SectionProps,
+} from "@radix-ui/themes";
+import styled from "styled-components";
 
-type FlexProps = {
-  display?: "none" | "inline-flex" | "flex";
-  direction?: "row" | "column" | "row-reverse" | "column-reverse";
-  align?: "start" | "center" | "end" | "baseline" | "stretch";
-  justify?: "start" | "center" | "end" | "space-between";
-  wrap?: "nowrap" | "wrap" | "wrap-reverse";
-  gap?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-};
+const FlexLayout: any = Flex;
+const BoxLayout: any = Box;
+const GridLayout: any = Grid;
+const SectionLayout: any = Section;
+const ContainerLayout: any = Container;
 
-export const Flex = styled.div<FlexProps>`
-  display: ${({ display }) => display ?? "flex"};
-  flex-direction: ${({ direction }) => direction ?? "column"};
-
-  ${({ gap }) =>
-    gap &&
-    css`
-      gap: ${SPACING[gap]};
-    `}
-
-  ${({ align }) =>
-    align &&
-    css`
-      align-items: ${align};
-    `}
-
-  justify-content: ${({ justify }) => justify ?? "start"};
-
-  ${({ wrap }) =>
-    wrap &&
-    css`
-      flex-wrap: ${wrap};
-    `}
-`;
+export const FlexComponent = styled(FlexLayout)<FlexProps>``;
+export const BoxComponent = styled(BoxLayout)<BoxProps>``;
+export const GridComponent = styled(GridLayout)<GridProps>``;
+export const SectionComponent = styled(SectionLayout)<SectionProps>``;
+export const ContainerComponent = styled(ContainerLayout)<ContainerProps>``;

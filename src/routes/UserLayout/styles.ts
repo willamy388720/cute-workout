@@ -1,6 +1,6 @@
 import { Flex } from "@radix-ui/themes";
 import styled from "styled-components";
 
-export const ContainerHome = styled(Flex)`
-  flex: 1;
+export const LayoutContainer = styled(Flex)`
+  overflow-x: hidden;
 `;

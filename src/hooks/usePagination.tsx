@@ -1,85 +1,48 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 type UsePaginationProps<T> = {
   data: T[] | undefined;
-  itemsPerPage?: string;
+  itemsPerPage?: number;
 };
 
 export function usePagination<T>({
   data,
-  itemsPerPage = "12",
+  itemsPerPage = 8,
 }: UsePaginationProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [elementsPerPage, setElementsPerPage] = useState(itemsPerPage);
-  const [elements, setElements] = useState<T[]>([]);
 
-  const parsedElementsPerPage = useMemo(
-    () => parseInt(elementsPerPage),
-    [elementsPerPage]
-  );
+  const elements = useMemo(() => {
+    if (!data || data.length === 0) return [];
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setElements(data.slice(0, parsedElementsPerPage));
-    }
-  }, [data, parsedElementsPerPage]);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return data.slice(startIndex, startIndex + itemsPerPage);
+  }, [data, currentPage, itemsPerPage]);
 
   function paginate(pageNumber: number) {
     if (!data) return;
     setCurrentPage(pageNumber);
-
-    const startIndex = (pageNumber - 1) * parseInt(elementsPerPage);
-    const endIndex = startIndex + parseInt(elementsPerPage);
-
-    if (!data || data.length === 0) return;
-
-    setElements(data.slice(startIndex, endIndex));
   }
 
   function previousPage() {
-    if (!data || currentPage === 1) return;
-
-    const newPage = currentPage - 1;
-    setCurrentPage(newPage);
-
-    const startIndex = (newPage - 1) * parseInt(elementsPerPage);
-    const endIndex = startIndex + parseInt(elementsPerPage);
-
-    if (!data || data.length === 0) return;
-
-    setElements(data.slice(startIndex, endIndex));
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   }
 
   function nextPage() {
-    if (
-      !data ||
-      currentPage === Math.ceil(data.length / parseInt(elementsPerPage))
-    )
-      return;
-
-    const newPage = currentPage + 1;
-    setCurrentPage(newPage);
-
-    const startIndex = (newPage - 1) * parseInt(elementsPerPage);
-    const endIndex = startIndex + parseInt(elementsPerPage);
-
-    if (!data || data.length === 0) return;
-
-    setElements(data.slice(startIndex, endIndex));
+    if (data && currentPage < Math.ceil(data.length / itemsPerPage)) {
+      setCurrentPage((prev) => prev + 1);
+    }
   }
 
-  function saveElementsPerPage(value: string) {
-    setElementsPerPage(value);
+  function resetCurrentPage() {
     setCurrentPage(1);
   }
 
   return {
     currentPage,
-    elementsPerPage,
     elements,
     paginate,
     previousPage,
     nextPage,
-    saveElementsPerPage,
+    resetCurrentPage,
   };
 }

@@ -1,15 +1,16 @@
-import { Flex } from "@styles/layout";
-import { Link, Text } from "@styles/typography";
+import { Flex } from "@radix-ui/themes";
+import { TextComponent } from "@styles/typography";
+import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 export const ContainerSidebar = styled(Flex)`
   position: fixed;
   left: 0;
-  top: 0;
   bottom: 0;
+  top: 5.6rem;
 
   @media (max-width: 1366px) and (max-height: 768px) {
-    border-right: 1px solid var(--gray-100);
+    border-right: 1px solid var(--gray-a6);
   }
 `;
 
@@ -18,16 +19,16 @@ type BarProps = {
 };
 
 export const Bar = styled(Flex)<BarProps>`
-  background: var(--white);
-  color: var(--gray-900);
-  height: 100vh;
+  background: var(--color-background);
+  color: var(--gray-12);
+  height: calc(100vh - 5.6rem);
   width: ${({ collapsed }) => (collapsed ? "7.2" : "24")}rem;
   transition: all 0.3s ease-out;
-  border-right: 1px solid var(--gray-100);
+  border-right: 1px solid var(--gray-a6);
   flex-direction: column;
   overflow: hidden;
 
-  padding: 2.4rem 1.2rem;
+  padding: 0 var(--space-3);
 
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari e Opera */
@@ -46,7 +47,7 @@ type MenuItemProps = {
 };
 
 export const MenuItem = styled(Link)<MenuItemProps>`
-  color: var(--gray-900);
+  color: var(--gray-12);
   text-decoration: none;
   user-select: none;
   transition: all 0.3s ease;
@@ -54,15 +55,15 @@ export const MenuItem = styled(Link)<MenuItemProps>`
   height: 4rem;
 
   padding-left: ${({ collapsed }) =>
-    collapsed ? "calc(1.2rem + 2px)" : "1.2rem"};
-  padding-right: 1.2rem;
-  border-radius: 1.2rem;
+    collapsed ? "calc(var(--space-3) + 2px)" : "var(--space-3)"};
+  padding-right: var(--space-3);
+  border-radius: var(--radius-3);
   align-items: center;
 
   ${({ disabled }) =>
     disabled &&
     css`
-      color: var(--gray-900);
+      color: var(--gray-9);
       cursor: not-allowed;
       pointer-events: none;
     `}
@@ -70,18 +71,18 @@ export const MenuItem = styled(Link)<MenuItemProps>`
   ${({ active }) =>
     active
       ? css`
-          background-color: var(--success-500);
-          color: var(--white) !important;
+          background-color: var(--accent-10);
+          color: var(--gray-1);
           font-weight: 700;
         `
       : css`
           &:hover {
-            background-color: var(--gray-100);
+            background-color: var(--accent-a3);
           }
         `}
 `;
 
-export const ItemText = styled(Text)`
+export const ItemText = styled(TextComponent)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -90,13 +91,13 @@ export const ItemText = styled(Text)`
 export const CollapsedSidebar = styled.button`
   all: unset;
   display: flex;
-  gap: 0.8rem;
-  color: var(--gray-900);
+  gap: var(--space-2);
+  color: var(--gray-12);
   transition: all 0.3s;
   user-select: none;
   display: flex;
-  padding: 0 1.2rem;
-  border-radius: 1.2rem;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-3);
   height: 4rem;
 
   display: flex;
@@ -104,11 +105,11 @@ export const CollapsedSidebar = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: var(--gray-100);
+    background-color: var(--accent-a3);
   }
 
   &:active {
-    background-color: var(--success-500);
-    color: var(--white);
+    background-color: var(--accent-10);
+    color: var(--gray-1);
   }
 `;

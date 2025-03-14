@@ -115,7 +115,7 @@ export function SignUp() {
           image: "",
         });
         reset({ email: "", password: "", passwordConfirmation: "" });
-        navigate("/");
+        navigate("/treino");
       }
     } catch (error) {
       openToast({

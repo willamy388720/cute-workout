@@ -87,7 +87,6 @@ export function SignIn() {
       const dataUser = await get(ref(database, "profiles/" + user.uid));
 
       if (dataUser.exists()) {
-        console.log("ENTREI AQUI");
         reset({ email: "", password: "" });
         navigate("/");
       } else {
@@ -122,7 +121,7 @@ export function SignIn() {
 
       if (user) {
         reset({ email: "", password: "" });
-        navigate("/");
+        navigate("/treino");
       }
     } catch (error) {
       openToast({

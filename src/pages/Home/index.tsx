@@ -1,32 +1,21 @@
-import { useProfile } from "@hooks/useProfile";
+import { EmptyTraining } from "@components/home/EmptyTraining";
 import { ContainerHome } from "./styles";
-import { Button } from "@radix-ui/themes";
-import { useToast } from "@hooks/useToast";
-import { signOut } from "firebase/auth";
-import { auth } from "@services/firebase";
+import { Flex } from "@radix-ui/themes";
+import { useTrainingPlans } from "@hooks/useTrainingPlans";
+import { TrainingPlans } from "@components/home/TrainingPlans";
 
 export function Home() {
-  const { profile, mutationProfileFn } = useProfile();
+  const { trainingPlans } = useTrainingPlans();
 
-  const { openToast } = useToast();
+  return (
+    <ContainerHome width={"100%"}>
+      {!trainingPlans.trainings && (
+        <Flex justify={"center"} align={"center"} width={"100%"}>
+          <EmptyTraining />
+        </Flex>
+      )}
 
-  async function handleLogout() {
-    try {
-      await signOut(auth);
-
-      mutationProfileFn({ ...profile, action: "delete" });
-    } catch (error) {
-      console.error(error);
-      openToast({
-        isOpen: true,
-        title: "Algo inesperado aconteceu",
-        content: "Tente novamente",
-        error: true,
-      });
-    }
-  }
-
-  console.log(profile.image);
-
-  return <ContainerHome></ContainerHome>;
+      {trainingPlans.trainings && <TrainingPlans />}
+    </ContainerHome>
+  );
 }

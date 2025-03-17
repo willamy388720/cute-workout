@@ -8,7 +8,7 @@ export const ContainerCreateManualWorkout = styled(Flex)`
   width: 100%;
 
   @media ${breakpoints.lg} {
-    padding: 0 var(--space-5);
+    padding: var(--space-5);
   }
 `;
 

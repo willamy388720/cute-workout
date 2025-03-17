@@ -1,4 +1,5 @@
 import { Flex } from "@radix-ui/themes";
+import { breakpoints } from "@styles/breakpoint";
 import { TextComponent } from "@styles/typography";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
@@ -11,6 +12,10 @@ export const ContainerSidebar = styled(Flex)`
 
   @media (max-width: 1366px) and (max-height: 768px) {
     border-right: 1px solid var(--gray-a6);
+  }
+
+  @media ${breakpoints.sm} {
+    display: none;
   }
 `;
 

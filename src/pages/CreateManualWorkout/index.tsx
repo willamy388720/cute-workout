@@ -17,6 +17,7 @@ import {
   ContentSelectExercises,
   DescriptionFormWorkout,
   ImageExercise,
+  SelectMuscleGroup,
   TitleFormWorkout,
 } from "./styles";
 import { z } from "zod";
@@ -482,7 +483,7 @@ export function CreateManualWorkout() {
 
           <Flex gap={"5"} direction={"column"}>
             {!isEditingExercise && (
-              <Flex gap={"2"} direction={"column"} width={"40%"}>
+              <SelectMuscleGroup gap={"2"} direction={"column"}>
                 <Text size={"3"} weight={"medium"}>
                   Grupo Muscular
                 </Text>
@@ -513,7 +514,7 @@ export function CreateManualWorkout() {
                     </Select.Root>
                   )}
                 />
-              </Flex>
+              </SelectMuscleGroup>
             )}
 
             {watch("muscleGroup") !== "" && (
@@ -679,11 +680,22 @@ export function CreateManualWorkout() {
                 my={"6"}
               >
                 <Dumbbell size={50} color="var(--gray-8)" />
-                <Text color="gray" mt={"2"} weight={"medium"} size={"3"}>
+                <Text
+                  color="gray"
+                  mt={"2"}
+                  weight={"medium"}
+                  size={"3"}
+                  align={"center"}
+                >
                   Nenhum exercício adicionado.
                 </Text>
 
-                <Text color="gray" weight={"medium"} size={"2"}>
+                <Text
+                  color="gray"
+                  weight={"medium"}
+                  size={"2"}
+                  align={"center"}
+                >
                   Use o formulário acima para adicionar exercícios ao seu
                   treino.
                 </Text>
@@ -775,7 +787,11 @@ export function CreateManualWorkout() {
                   gap={"2"}
                 >
                   <Flex width={"100%"} justify={"between"} align={"center"}>
-                    <Text size={"4"} weight={"bold"}>
+                    <Text
+                      size={"4"}
+                      weight={"bold"}
+                      className="card-workout-title"
+                    >
                       {workout.title}
                     </Text>
 

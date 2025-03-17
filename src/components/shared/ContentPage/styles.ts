@@ -1,4 +1,5 @@
 import { Flex } from "@radix-ui/themes";
+import { breakpoints } from "@styles/breakpoint";
 import styled, { css } from "styled-components";
 
 type ContentProps = {
@@ -23,4 +24,9 @@ export const Content = styled(Flex)<ContentProps>`
           align-items: center;
         `}
   margin-top: 5.6rem;
+
+  @media ${breakpoints.sm} {
+    width: 100%;
+    margin-left: 0;
+  }
 `;

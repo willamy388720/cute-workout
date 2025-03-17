@@ -1,10 +1,15 @@
 import { Flex, Text } from "@radix-ui/themes";
+import { breakpoints } from "@styles/breakpoint";
 import styled, { css } from "styled-components";
 
 export const ContainerCreateManualWorkout = styled(Flex)`
   flex: 1;
   max-width: 128rem;
   width: 100%;
+
+  @media ${breakpoints.lg} {
+    padding: 0 var(--space-5);
+  }
 `;
 
 export const CardFormWorkout = styled(Flex)`
@@ -80,4 +85,26 @@ export const CardWorkout = styled(Flex)`
   border: 1px solid var(--gray-a5);
   border-radius: var(--radius-3);
   padding: 1.6rem;
+
+  @media ${breakpoints.xs} {
+    .card-workout-title {
+      max-width: 18rem;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+`;
+
+export const SelectMuscleGroup = styled(Flex)`
+  width: 40%;
+
+  @media ${breakpoints.md} {
+    width: 60%;
+  }
+
+  @media ${breakpoints.sm} {
+    width: 100%;
+  }
 `;

@@ -7,6 +7,9 @@ import { Mail, Pencil } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { maskHeight, maskWeight } from "@utils/masks";
+import { useToast } from "@hooks/useToast";
+import { ref, update } from "firebase/database";
+import { database } from "@services/firebase";
 
 const profileFormSchema = z.object({
   email: z.string().email(),
@@ -21,6 +24,7 @@ export function Profile() {
   const [isEditing, setIsEditing] = useState(false);
 
   const { profile } = useProfile();
+  const { openToast } = useToast();
 
   const fallback = profile
     ? profile.name.trim() !== ""
@@ -69,6 +73,32 @@ export function Profile() {
     setValue("name", profile.name);
     setValue("height", profile.height);
     setValue("weight", profile.weight);
+  }
+
+  async function onSubmitProfile(data: profileFormData) {
+    try {
+      update(ref(database, "profiles/" + profile.id), {
+        name: data.name,
+        height: data.height,
+        weight: data.weight,
+      });
+
+      openToast({
+        isOpen: true,
+        title: "Perfil Atualizado",
+        content: "Dados do perfil atualizado com sucesso",
+        error: false,
+      });
+
+      setIsEditing(false);
+    } catch (error) {
+      openToast({
+        isOpen: true,
+        title: "Algo inesperado aconteceu",
+        content: "Tente novamente",
+        error: true,
+      });
+    }
   }
 
   useEffect(() => {
@@ -232,7 +262,11 @@ export function Profile() {
               Cancelar
             </Button>
 
-            <Button size={"3"} style={{ flex: 1 }}>
+            <Button
+              size={"3"}
+              style={{ flex: 1 }}
+              onClick={handleSubmit(onSubmitProfile)}
+            >
               Salvar
             </Button>
           </Flex>

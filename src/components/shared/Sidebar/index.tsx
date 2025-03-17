@@ -6,7 +6,6 @@ import {
   Dumbbell,
   Goal,
   LogOut,
-  Ruler,
   Settings,
   User,
 } from "lucide-react";
@@ -27,7 +26,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "@services/firebase";
 import { useProfile } from "@hooks/useProfile";
 
-type Item = {
+export type Item = {
   path: string;
   name: string;
   icon: ReactElement;
@@ -53,12 +52,6 @@ export function Sidebar() {
       path: "/perfil",
       name: "Perfil",
       icon: <User size={18} />,
-      disabled: false,
-    },
-    {
-      path: "/medidas",
-      name: "Minhas Medidas",
-      icon: <Ruler size={18} />,
       disabled: false,
     },
     {

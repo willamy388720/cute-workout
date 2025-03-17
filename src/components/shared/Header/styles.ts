@@ -50,6 +50,10 @@ export const ContentHeader = styled(Flex)`
     display: flex;
   }
 
+  .menu-mobile {
+    display: none;
+  }
+
   @media ${breakpoints.sm} {
     .logo-desktop {
       display: none;
@@ -73,6 +77,10 @@ export const ContentHeader = styled(Flex)`
 
     .info-user {
       display: none;
+    }
+
+    .menu-mobile {
+      display: inline-flex;
     }
   }
 `;

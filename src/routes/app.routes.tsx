@@ -23,7 +23,6 @@ export function AppRoute() {
       >
         <Route path="/treino" element={<Home />} />
         <Route path="/perfil" element={<Profile />} />
-        <Route path="/medidas" element={<></>} />
       </Route>
 
       <Route

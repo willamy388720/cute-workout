@@ -1,6 +1,7 @@
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { ButtonPage } from "./styles";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { useMediaQuery } from "react-responsive";
 
 type Props = {
   elementsPerPage: string;
@@ -21,9 +22,21 @@ export function Paginate({
 }: Props) {
   const totalPages = Math.ceil(totalelements / parseInt(elementsPerPage));
 
+  // Detecta se o dispositivo é mobile (ex: telas com largura máxima de 600px)
+  const isMobile = useMediaQuery({ query: "(max-width: 600px)" });
+
   // Função para gerar os números de página com reticências se necessário
   const getPageNumbers = () => {
-    // Se o total de páginas for pequeno, retorna todas
+    // Para mobile, exibe apenas a página anterior, atual e próxima (se existirem)
+    if (isMobile) {
+      const pages: number[] = [];
+      if (currentPage > 1) pages.push(currentPage - 1);
+      pages.push(currentPage);
+      if (currentPage < totalPages) pages.push(currentPage + 1);
+      return pages;
+    }
+
+    // Lógica para telas maiores
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
@@ -80,7 +93,7 @@ export function Paginate({
           disabled={currentPage === 1}
         >
           <ChevronLeftIcon size={16} />
-          Anterior
+          {!isMobile && "Anterior"}
         </Button>
         {pageNumbers.map((number, index) =>
           // Se for reticências, renderiza um texto simples
@@ -118,7 +131,7 @@ export function Paginate({
           color="gray"
           disabled={currentPage === totalPages}
         >
-          Próximo
+          {!isMobile && "Próximo"}
           <ChevronRightIcon size={16} />
         </Button>
       </Flex>

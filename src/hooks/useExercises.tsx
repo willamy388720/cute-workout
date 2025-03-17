@@ -17,6 +17,7 @@ export function useExercises() {
         ).map(([id, value]) => ({
           id,
           title: value.title,
+          titileEnglish: value.titileEnglish,
           equipment: value.equipment,
           primaryMuscles: value.primaryMuscles,
           image: value.image,

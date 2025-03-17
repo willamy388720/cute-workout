@@ -1,9 +1,28 @@
 import { AccordionContent, AccordionTrigger } from "@radix-ui/react-accordion";
 import { Flex } from "@radix-ui/themes";
+import { breakpoints } from "@styles/breakpoint";
 import styled from "styled-components";
 
 export const ContainerTrainingPlans = styled(Flex)`
   padding: 3.2rem 2.4rem;
+
+  .home-button-edit-training-desktop {
+    display: inline-flex;
+  }
+
+  .home-button-edit-training-mobile {
+    display: none;
+  }
+
+  @media ${breakpoints.xs} {
+    .home-button-edit-training-desktop {
+      display: none;
+    }
+
+    .home-button-edit-training-mobile {
+      display: inline-flex;
+    }
+  }
 `;
 
 export const AccordionTriggerTraining = styled(AccordionTrigger)`
@@ -28,6 +47,16 @@ export const AccordionTriggerTraining = styled(AccordionTrigger)`
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+
+  @media ${breakpoints.xs} {
+    .accordion-title {
+      max-width: 28rem;
+      width: 100%;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
 `;
 
 export const AccordionContentTraining = styled(AccordionContent)`
@@ -43,6 +72,12 @@ export const AccordionContentTraining = styled(AccordionContent)`
     gap: var(--space-5);
     grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
   }
+`;
+
+export const ContenteAlternativeExercises = styled(Flex)`
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
 `;
 
 export const CardExercise = styled(Flex)`

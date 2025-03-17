@@ -1,9 +1,13 @@
-import { Avatar, Flex, Skeleton, Text } from "@radix-ui/themes";
+import { Avatar, Flex, IconButton, Skeleton, Text } from "@radix-ui/themes";
 import { ContainerHeader, ContainerLogo, ContentHeader } from "./styles";
 
 import { useProfile } from "@hooks/useProfile";
+import { Menu } from "lucide-react";
+import { useState } from "react";
+import { MenuMobile } from "../MenuMobile";
 
 export function Header() {
+  const [isOpenMenuMobile, setIsOpenMenuMobile] = useState(false);
   const { profile, isLoading } = useProfile();
 
   const userConnected = Object.entries(profile).length > 0;
@@ -55,10 +59,25 @@ export function Header() {
                   {profile?.name}
                 </Text>
               </Flex>
+
+              <IconButton
+                variant="ghost"
+                color="gray"
+                className="menu-mobile"
+                onClick={() => setIsOpenMenuMobile((prevState) => !prevState)}
+              >
+                <Menu size={22} />
+              </IconButton>
             </Flex>
           </Flex>
         )}
       </ContentHeader>
+
+      {isOpenMenuMobile && (
+        <MenuMobile
+          saveIsOpenMenuMobile={(value) => setIsOpenMenuMobile(value)}
+        />
+      )}
     </ContainerHeader>
   );
 }

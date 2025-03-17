@@ -113,11 +113,12 @@ export function Sidebar() {
 
           <MenuItem to={"/signin"} collapsed={collapsed} onClick={handleLogout}>
             <Flex gap={"2"} align={"center"}>
-              <LogOut size={18} />
+              <LogOut size={18} color="var(--red-a11)" />
               <ItemText
                 size={"2"}
                 style={{ display: collapsed ? "none" : "block" }}
                 weight={"medium"}
+                color="red"
               >
                 Sair
               </ItemText>

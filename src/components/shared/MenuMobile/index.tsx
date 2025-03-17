@@ -1,9 +1,19 @@
-import { ChartSpline, Dumbbell, Goal, Settings, User } from "lucide-react";
+import {
+  ChartSpline,
+  Dumbbell,
+  Goal,
+  LogOut,
+  Settings,
+  User,
+} from "lucide-react";
 import { Item } from "../Sidebar";
 import { ContainerMenuMobile, ItemText, MenuItem } from "./styles";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import { Flex } from "@radix-ui/themes";
+import { useProfile } from "@hooks/useProfile";
+import { signOut } from "firebase/auth";
+import { auth } from "@services/firebase";
 
 type MenuMobileProps = {
   saveIsOpenMenuMobile: (value: boolean) => void;
@@ -12,6 +22,8 @@ type MenuMobileProps = {
 export function MenuMobile({ saveIsOpenMenuMobile }: MenuMobileProps) {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState(location.pathname);
+
+  const { mutationProfileFn, profile } = useProfile();
 
   const itemsUser: Item[] = [
     {
@@ -46,6 +58,15 @@ export function MenuMobile({ saveIsOpenMenuMobile }: MenuMobileProps) {
     },
   ];
 
+  async function handleLogout() {
+    try {
+      await mutationProfileFn({ ...profile, action: "delete" });
+      await signOut(auth);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   return (
     <ContainerMenuMobile direction={"column"} align={"center"}>
       {itemsUser.map((item, index) => (
@@ -67,6 +88,21 @@ export function MenuMobile({ saveIsOpenMenuMobile }: MenuMobileProps) {
           </Flex>
         </MenuItem>
       ))}
+
+      <MenuItem
+        to={"/signin"}
+        onClick={() => {
+          saveIsOpenMenuMobile(false);
+          handleLogout();
+        }}
+      >
+        <Flex gap={"4"} align={"center"}>
+          <LogOut size={30} color={"var(--red-a11)"} />
+          <ItemText size={"6"} weight={"medium"} color="red">
+            Sair
+          </ItemText>
+        </Flex>
+      </MenuItem>
     </ContainerMenuMobile>
   );
 }

@@ -11,6 +11,7 @@ import { useProfile } from "@hooks/useProfile";
 import { createTrainingPlans } from "@services/n8n";
 import { useTrainingPlans } from "@hooks/useTrainingPlans";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 const aiFormSchema = z.object({
   musclePreference: z.string().min(1, "Muscle preference is required"),
@@ -30,6 +31,9 @@ export function EmptyTraining() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [step, setStep] = useState(1);
+
+  const isMobile = useMediaQuery({ query: "(max-width: 600px)" });
+  const isMobileXS = useMediaQuery({ query: "(max-width: 540px)" });
 
   const { openToast } = useToast();
 
@@ -123,7 +127,12 @@ export function EmptyTraining() {
         </Dialog.Description>
 
         {step === 1 && (
-          <Flex direction="row" gap="6" justify={"center"}>
+          <Flex
+            direction={isMobileXS ? "column" : "row"}
+            gap={isMobile ? "4" : "6"}
+            justify={"center"}
+            align={"center"}
+          >
             <CardtTypeOfCreation
               selected={typeOfCreation === "AI"}
               direction={"column"}
@@ -132,7 +141,7 @@ export function EmptyTraining() {
               onClick={() => setTypeOfCreation("AI")}
             >
               <Bot
-                size={50}
+                size={isMobile ? 40 : 50}
                 color={
                   typeOfCreation === "AI" ? "var(--accent-9)" : "var(--gray-12)"
                 }
@@ -141,7 +150,8 @@ export function EmptyTraining() {
               <Flex direction={"column"} align={"center"} gap={"3"}>
                 <Text
                   weight={"bold"}
-                  size={"5"}
+                  size={isMobile ? "3" : "5"}
+                  align={"center"}
                   style={{
                     color:
                       typeOfCreation === "AI"
@@ -166,7 +176,7 @@ export function EmptyTraining() {
               onClick={() => setTypeOfCreation("MANUAL")}
             >
               <Pencil
-                size={50}
+                size={isMobile ? 40 : 50}
                 color={
                   typeOfCreation === "MANUAL"
                     ? "var(--accent-9)"
@@ -177,7 +187,8 @@ export function EmptyTraining() {
               <Flex direction={"column"} align={"center"} gap={"3"}>
                 <Text
                   weight={"bold"}
-                  size={"5"}
+                  size={isMobile ? "3" : "5"}
+                  align={"center"}
                   style={{
                     color:
                       typeOfCreation === "MANUAL"

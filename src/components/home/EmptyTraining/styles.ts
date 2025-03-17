@@ -14,4 +14,7 @@ export const CardtTypeOfCreation = styled(Flex)<CardtTypeOfCreationProps>`
   max-width: 24rem;
   width: 100%;
   padding: 2rem;
+  flex: 1;
+  height: 100%;
+  aspect-ratio: 1 / 1;
 `;

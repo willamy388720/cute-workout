@@ -7,8 +7,9 @@ import { TrainingPlans } from "@components/home/TrainingPlans";
 export function Home() {
   const { trainingPlans, isLoading } = useTrainingPlans();
 
-  const trainingsEmpty =
-    trainingPlans.trainings && trainingPlans.trainings.length === 0;
+  const trainingsEmpty = trainingPlans.trainings
+    ? trainingPlans.trainings.length === 0
+    : true;
 
   if (isLoading) {
     <ContainerHome width={"100%"} justify={"center"} align={"center"}>
@@ -16,6 +17,7 @@ export function Home() {
     </ContainerHome>;
   }
 
+  console.log(trainingsEmpty);
   return (
     <ContainerHome width={"100%"}>
       {trainingsEmpty && (

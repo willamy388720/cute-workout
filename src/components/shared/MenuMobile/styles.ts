@@ -26,6 +26,7 @@ export const MenuItem = styled(Link)<MenuItemProps>`
   height: 4rem;
   width: 100%;
   align-items: center;
+  justify-content: space-between;
 
   padding: var(--space-6);
 

@@ -7,10 +7,15 @@ import { UserLayout } from "./UserLayout";
 import { Profile } from "@pages/Profile";
 import { WorkoutLayout } from "./WorkoutLayout";
 import { CreateManualWorkout } from "@pages/CreateManualWorkout";
+import { NotFound } from "@pages/NotFound";
+import { MyStudents } from "@pages/MyStudents";
+import { Notifications } from "@pages/Notifications";
 
 export function AppRoute() {
   return (
     <Routes>
+      <Route path="*" element={<NotFound />} />
+
       <Route index element={<Navigate to={"/treino"} />} />
 
       <Route
@@ -23,6 +28,8 @@ export function AppRoute() {
       >
         <Route path="/treino" element={<Home />} />
         <Route path="/perfil" element={<Profile />} />
+        <Route path="/alunos" element={<MyStudents />} />
+        <Route path="/notificacoes" element={<Notifications />} />
       </Route>
 
       <Route
@@ -33,7 +40,7 @@ export function AppRoute() {
           </UserRoute>
         }
       >
-        <Route path="/treino/criar" element={<CreateManualWorkout />} />
+        <Route path="/treino/criar/:id" element={<CreateManualWorkout />} />
       </Route>
 
       <Route path="/signin" element={<SignIn />} />

@@ -16,6 +16,7 @@ import { useToast } from "@hooks/useToast";
 import { findAlternatives } from "@utils/pages/findAlternatives";
 import { useExercises } from "@hooks/useExercises";
 import { useState } from "react";
+import { useProfile } from "@hooks/useProfile";
 
 type TrainingPlansProps = {};
 
@@ -27,9 +28,13 @@ export function TrainingPlans({}: TrainingPlansProps) {
   const [originalExercise, setOriginalExercise] =
     useState<ExerciseInTrainingDTO | null>(null);
 
-  const { trainingPlans } = useTrainingPlans();
-
   const { exercises } = useExercises();
+
+  const { profile } = useProfile();
+
+  const profileId = profile.id ?? "";
+
+  const { trainingPlans } = useTrainingPlans({ profileId });
 
   const trainingsSorted = trainingPlans.trainings
     ? trainingPlans.trainings.sort((a, b) => a.title.localeCompare(b.title))
@@ -164,13 +169,15 @@ export function TrainingPlans({}: TrainingPlansProps) {
             Meu Treino
           </Text>
 
-          <Button
-            size={"3"}
-            onClick={() => navigate("/treino/criar")}
-            className="home-button-edit-training-desktop"
-          >
-            Editar ou adicionar treino
-          </Button>
+          {!profile.isBodybuildingStudent && (
+            <Button
+              size={"3"}
+              onClick={() => navigate(`/treino/criar/${profile.id}`)}
+              className="home-button-edit-training-desktop"
+            >
+              Editar ou adicionar treino
+            </Button>
+          )}
 
           <IconButton
             size={"3"}

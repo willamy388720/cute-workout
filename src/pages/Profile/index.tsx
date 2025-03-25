@@ -115,14 +115,28 @@ export function Profile() {
           width={"100%"}
           style={{ width: 300 }}
         >
-          <Avatar
-            size={"9"}
-            src={profile.image ?? ""}
-            fallback={fallback}
-            variant="solid"
-            color="gray"
-            radius="full"
-          />
+          <Flex direction={"column"} gap={"2"} align={"center"}>
+            <Avatar
+              size={"9"}
+              src={profile.image ?? ""}
+              fallback={fallback}
+              variant="solid"
+              color="gray"
+              radius="full"
+            />
+
+            {profile.isCoaching && (
+              <Text size={"3"} weight={"bold"}>
+                Coach
+              </Text>
+            )}
+
+            {profile.isBodybuildingStudent && (
+              <Text size={"3"} weight={"bold"}>
+                Aluno
+              </Text>
+            )}
+          </Flex>
 
           <Flex gap={"2"} direction={"column"} width={"100%"}>
             <Text

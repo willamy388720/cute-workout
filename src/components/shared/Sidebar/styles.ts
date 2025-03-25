@@ -64,6 +64,7 @@ export const MenuItem = styled(Link)<MenuItemProps>`
   padding-right: var(--space-3);
   border-radius: var(--radius-3);
   align-items: center;
+  justify-content: space-between;
 
   ${({ disabled }) =>
     disabled &&

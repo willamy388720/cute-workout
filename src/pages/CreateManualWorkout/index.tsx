@@ -44,8 +44,7 @@ import { ExerciseInTrainingDTO } from "@dtos/exerciseInTrainingDTO";
 import { v4 as uuidv4 } from "uuid";
 import { ref, remove, set } from "firebase/database";
 import { database } from "@services/firebase";
-import { useProfile } from "@hooks/useProfile";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { TrainingDTO } from "@dtos/trainingDTO";
 
 const workoutFormSchema = z.object({
@@ -125,6 +124,10 @@ export function CreateManualWorkout() {
 
   const navigate = useNavigate();
 
+  const params = useParams();
+
+  const profileTrainingId = params.id ?? "";
+
   const { control, handleSubmit, reset, watch, setValue } =
     useForm<createWorkoutFormData>({
       resolver: zodResolver(workoutFormSchema),
@@ -133,9 +136,7 @@ export function CreateManualWorkout() {
 
   const { exercises } = useExercises();
 
-  const { trainingPlans } = useTrainingPlans();
-
-  const { profile } = useProfile();
+  const { trainingPlans } = useTrainingPlans({ profileId: profileTrainingId });
 
   const workouts = trainingPlans.trainings ?? [];
 
@@ -229,7 +230,7 @@ export function CreateManualWorkout() {
       await set(
         ref(
           database,
-          "training_plans/" + profile.id + "/trainings/" + trainingId
+          "training_plans/" + profileTrainingId + "/trainings/" + trainingId
         ),
         {
           title: nameWorkout,
@@ -243,7 +244,7 @@ export function CreateManualWorkout() {
             ref(
               database,
               "training_plans/" +
-                profile.id +
+                profileTrainingId +
                 "/trainings/" +
                 trainingId +
                 "/exercises/" +
@@ -264,7 +265,7 @@ export function CreateManualWorkout() {
           ref(
             database,
             "training_plans/" +
-              profile.id +
+              profileTrainingId +
               "/trainings/" +
               trainingId +
               "/exercises/" +
@@ -380,7 +381,10 @@ export function CreateManualWorkout() {
       await remove(
         ref(
           database,
-          "training_plans/" + profile.id + "/trainings/" + workoutDeleting.id
+          "training_plans/" +
+            profileTrainingId +
+            "/trainings/" +
+            workoutDeleting.id
         )
       );
 
@@ -433,9 +437,9 @@ export function CreateManualWorkout() {
 
         <Flex direction={"column"} gap={"2"}>
           <div>
-            <Button variant="ghost" onClick={() => navigate("/treino")}>
+            <Button variant="ghost" onClick={() => navigate(-1)}>
               <ArrowLeft size={16} />
-              Voltar para página inicial
+              Voltar
             </Button>
           </div>
 

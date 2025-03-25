@@ -5,4 +5,8 @@ export type UserDTO = {
   image: string;
   weight: string;
   height: string;
+  isBodybuildingStudent?: boolean;
+  isCoaching?: boolean;
+  bodybuildingStudents?: string[];
+  coachId?: string;
 };

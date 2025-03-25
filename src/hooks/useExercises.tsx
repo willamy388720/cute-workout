@@ -8,9 +8,9 @@ export function useExercises() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const categoriesRef = ref(database, "exercises/");
+    const exercisesRef = ref(database, "exercises/");
 
-    const unsubscribe = onValue(categoriesRef, (snapshot) => {
+    const unsubscribe = onValue(exercisesRef, (snapshot) => {
       if (snapshot.exists()) {
         const dataFormatted = Object.entries<ExerciseDTO>(
           snapshot.val() ?? {}

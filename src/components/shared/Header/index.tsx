@@ -5,10 +5,12 @@ import { useProfile } from "@hooks/useProfile";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { MenuMobile } from "../MenuMobile";
+import { useNotifications } from "@hooks/useNofitications";
 
 export function Header() {
   const [isOpenMenuMobile, setIsOpenMenuMobile] = useState(false);
   const { profile, isLoading } = useProfile();
+  const { notifications } = useNotifications();
 
   const userConnected = Object.entries(profile).length > 0;
 
@@ -58,6 +60,11 @@ export function Header() {
                 <Text size={"3"} weight={"bold"}>
                   {profile?.name}
                 </Text>
+                {(profile.isBodybuildingStudent || profile.isCoaching) && (
+                  <Text size={"1"} weight={"medium"} color="gray">
+                    {profile.isBodybuildingStudent ? "Aluno" : "Coach"}
+                  </Text>
+                )}
               </Flex>
 
               <IconButton
@@ -65,8 +72,23 @@ export function Header() {
                 color="gray"
                 className="menu-mobile"
                 onClick={() => setIsOpenMenuMobile((prevState) => !prevState)}
+                style={{ position: "relative" }}
               >
                 <Menu size={22} />
+
+                {notifications.length > 0 && (
+                  <div
+                    style={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: 999999,
+                      background: "var(--red-9)",
+                      position: "absolute",
+                      top: 6,
+                      right: 6,
+                    }}
+                  ></div>
+                )}
               </IconButton>
             </Flex>
           </Flex>

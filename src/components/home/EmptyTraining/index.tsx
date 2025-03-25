@@ -12,6 +12,7 @@ import { createTrainingPlans } from "@services/n8n";
 import { useTrainingPlans } from "@hooks/useTrainingPlans";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import { v4 as uuid } from "uuid";
 
 const aiFormSchema = z.object({
   musclePreference: z.string().min(1, "Muscle preference is required"),
@@ -39,7 +40,9 @@ export function EmptyTraining() {
 
   const { profile } = useProfile();
 
-  const { trainingPlans } = useTrainingPlans();
+  const profileId = profile.id ?? "";
+
+  const { trainingPlans } = useTrainingPlans({ profileId });
 
   const navigate = useNavigate();
 
@@ -67,7 +70,7 @@ export function EmptyTraining() {
 
     if (typeOfCreation === "MANUAL" && step === 1) {
       setIsOpenModal(false);
-      navigate("/treino/criar");
+      navigate(`/treino/criar/${uuid()}`);
     }
   }
 
@@ -264,12 +267,20 @@ export function EmptyTraining() {
 
         <Flex direction={"column"} align={"center"}>
           <Heading>Treino vazio</Heading>
-          <Text>Cadastre seus treinos aqui</Text>
+          {!profile.isBodybuildingStudent && (
+            <Text>Cadastre seus treinos aqui</Text>
+          )}
+
+          {profile.isBodybuildingStudent && (
+            <Text>Espere o seu coach passar o treino</Text>
+          )}
         </Flex>
 
-        <Button size={"3"} onClick={() => setIsOpenModal(true)}>
-          Adicionar treino
-        </Button>
+        {!profile.isBodybuildingStudent && (
+          <Button size={"3"} onClick={() => setIsOpenModal(true)}>
+            Adicionar treino
+          </Button>
+        )}
       </Flex>
     </Dialog.Root>
   );

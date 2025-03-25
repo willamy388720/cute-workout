@@ -18,7 +18,6 @@ export function UserRoute({ children }: UserRouteProps) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log(user);
       if (user) {
         try {
           const uid = user.uid;
@@ -35,6 +34,10 @@ export function UserRoute({ children }: UserRouteProps) {
               image: snapshot.val().image,
               weight: snapshot.val().weight,
               height: snapshot.val().height,
+              bodybuildingStudents: snapshot.val().bodybuildingStudents,
+              isBodybuildingStudent: snapshot.val().isBodybuildingStudent,
+              isCoaching: snapshot.val().isCoaching,
+              coachId: snapshot.val().coachId,
               action: "save",
             });
           }

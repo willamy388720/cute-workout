@@ -5,17 +5,18 @@ import { database } from "@services/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { onValue, ref } from "firebase/database";
 import { useEffect } from "react";
-import { useProfile } from "./useProfile";
 
-export function useTrainingPlans() {
+type Props = {
+  profileId: string;
+};
+
+export function useTrainingPlans({ profileId }: Props) {
   const { data: trainingPlans = {} as TrainingPlansDTO, isLoading } = useQuery({
     queryKey: ["trainingPlans"],
     queryFn: () => {},
   });
 
   const queryClient = useQueryClient();
-
-  const { profile } = useProfile();
 
   const { mutateAsync: mutationTrainingPlansFn } = useMutation({
     mutationFn: mutationTrainingPlans,
@@ -40,14 +41,14 @@ export function useTrainingPlans() {
   }
 
   useEffect(() => {
-    const trainingPlansRef = ref(database, "training_plans/" + profile.id);
+    const trainingPlansRef = ref(database, "training_plans/" + profileId);
 
     const unsubscribe = onValue(trainingPlansRef, (snapshot) => {
       const data = snapshot.val();
 
       if (data) {
         const dataFormatted: TrainingPlansDTO = {
-          id: profile.id,
+          id: profileId,
           trainings: Object.entries<TrainingDTO>(data.trainings ?? {}).map(
             ([id, value]) => ({
               id,
@@ -77,7 +78,7 @@ export function useTrainingPlans() {
     });
 
     return () => unsubscribe();
-  }, [profile]);
+  }, [profileId]);
 
   return {
     trainingPlans,

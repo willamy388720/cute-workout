@@ -119,17 +119,31 @@ export function SignIn() {
     try {
       const { user } = await signInWithPopup(auth, googleProvider);
 
-      if (user) {
+      const dataUser = await get(ref(database, "profiles/" + user.uid));
+
+      if (dataUser.exists()) {
         reset({ email: "", password: "" });
         navigate("/treino");
+      } else {
+        throw new Error("User does not exist");
       }
     } catch (error) {
-      openToast({
-        isOpen: true,
-        title: "Algo inesperado aconteceu",
-        content: "Tente novamente",
-        error: true,
-      });
+      if (error instanceof Error && error.message === "User does not exist") {
+        openToast({
+          isOpen: true,
+          title: "Usuário não existe",
+          content:
+            "Para acessar a nossa plataforma, você precisa de uma conta cadastrada",
+          error: true,
+        });
+      } else {
+        openToast({
+          isOpen: true,
+          title: "Algo inesperado aconteceu",
+          content: "Tente novamente",
+          error: true,
+        });
+      }
     } finally {
       setIsLoadingGoogle(false);
     }

@@ -87,7 +87,7 @@ const OBJMUCLESGROUP = {
   Abdômen: "Abs",
   Perna: "Leg",
   Panturrilha: "Calf",
-  Quadris: "Hips",
+  Quadris: "Hip",
   Cardio: "Cardio",
   "Corpo inteiro": "Full Body",
 };
@@ -410,6 +410,8 @@ export function CreateManualWorkout() {
       });
     }
   }
+
+  console.log(primaryMuscles);
 
   return (
     <Dialog.Root>

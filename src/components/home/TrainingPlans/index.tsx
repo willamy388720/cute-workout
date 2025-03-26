@@ -37,7 +37,7 @@ export function TrainingPlans({}: TrainingPlansProps) {
   const { trainingPlans } = useTrainingPlans({ profileId });
 
   const trainingsSorted = trainingPlans.trainings
-    ? trainingPlans.trainings.sort((a, b) => a.title.localeCompare(b.title))
+    ? trainingPlans.trainings.sort((a, b) => a.orderNumber - b.orderNumber)
     : [];
 
   const navigate = useNavigate();

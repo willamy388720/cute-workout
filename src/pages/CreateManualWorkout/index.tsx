@@ -138,7 +138,9 @@ export function CreateManualWorkout() {
 
   const { trainingPlans } = useTrainingPlans({ profileId: profileTrainingId });
 
-  const workouts = trainingPlans.trainings ?? [];
+  const workouts = trainingPlans.trainings
+    ? trainingPlans.trainings.sort((a, b) => a.orderNumber - b.orderNumber)
+    : [];
 
   const muscleGroup = watch("muscleGroup") as keyof typeof OBJMUCLESGROUP;
 
@@ -234,6 +236,7 @@ export function CreateManualWorkout() {
         ),
         {
           title: nameWorkout,
+          orderNumber: workouts.length,
         }
       );
 

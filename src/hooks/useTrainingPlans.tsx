@@ -53,6 +53,7 @@ export function useTrainingPlans({ profileId }: Props) {
             ([id, value]) => ({
               id,
               title: value.title,
+              orderNumber: value.orderNumber,
               exercises: Object.entries<ExerciseInTrainingDTO>(
                 value.exercises ?? {}
               ).map(([id, value]) => ({

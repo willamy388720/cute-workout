@@ -236,7 +236,9 @@ export function CreateManualWorkout() {
         ),
         {
           title: nameWorkout,
-          orderNumber: workouts.length,
+          orderNumber: isEditingWorkout
+            ? workoutEditing.orderNumber
+            : workouts.length,
         }
       );
 

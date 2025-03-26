@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
-import { Avatar, Button, Flex, Text, TextField } from "@radix-ui/themes";
+import {
+  Avatar,
+  Button,
+  Flex,
+  IconButton,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
 import { ContainerProfile } from "./styles";
 import { useProfile } from "@hooks/useProfile";
 import { Controller, useForm } from "react-hook-form";
-import { Mail, Pencil } from "lucide-react";
+import { Mail, Pencil, UserX } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { maskHeight, maskWeight } from "@utils/masks";
 import { useToast } from "@hooks/useToast";
-import { ref, update } from "firebase/database";
+import { get, ref, set, update } from "firebase/database";
 import { database } from "@services/firebase";
+import { ProfileDTO } from "@dtos/profileDTO";
+import { v4 as uuidv4 } from "uuid";
 
 const profileFormSchema = z.object({
   email: z.string().email(),
@@ -22,13 +31,20 @@ export type profileFormData = z.infer<typeof profileFormSchema>;
 
 export function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [coach, setCoach] = useState<ProfileDTO | null>(null);
 
-  const { profile } = useProfile();
+  const { profile, mutationProfileFn } = useProfile();
   const { openToast } = useToast();
 
   const fallback = profile
     ? profile.name.trim() !== ""
       ? profile.name[0].toUpperCase()
+      : ""
+    : "";
+
+  const fallbackCoach = coach
+    ? coach.name.trim() !== ""
+      ? coach.name[0].toUpperCase()
       : ""
     : "";
 
@@ -75,6 +91,37 @@ export function Profile() {
     setValue("weight", profile.weight);
   }
 
+  async function getCoach() {
+    if (!profile) return;
+
+    if (!profile.coachId) return;
+
+    try {
+      const coachRef = ref(database, "profiles/" + profile.coachId);
+
+      const coachData = await get(coachRef);
+
+      const dataFormatted: ProfileDTO = {
+        id: profile.coachId,
+        email: coachData.val().email,
+        name: coachData.val().name,
+        image: coachData.val().image,
+        height: coachData.val().height,
+        weight: coachData.val().weight,
+        bodybuildingStudents: coachData.val().bodybuildingStudents,
+      };
+
+      setCoach(dataFormatted);
+    } catch (error) {
+      openToast({
+        isOpen: true,
+        title: "Algo inesperado aconteceu",
+        content: "Tente novamente",
+        error: true,
+      });
+    }
+  }
+
   async function onSubmitProfile(data: profileFormData) {
     try {
       update(ref(database, "profiles/" + profile.id), {
@@ -101,8 +148,64 @@ export function Profile() {
     }
   }
 
+  async function removeCoach() {
+    if (!profile) return;
+    if (!coach) return;
+
+    try {
+      const bodybuildingStudents: string[] = coach.bodybuildingStudents ?? [];
+
+      const bodybuildingStudentsFiltered = bodybuildingStudents.filter(
+        (student) => student !== profile.id
+      );
+
+      await update(ref(database, "profiles/" + coach.id), {
+        bodybuildingStudents: bodybuildingStudentsFiltered,
+      });
+
+      await update(ref(database, "profiles/" + profile.id), {
+        isBodybuildingStudent: false,
+        coachId: "",
+      });
+
+      await set(
+        ref(
+          database,
+          "invitations_sent/" + coach.id + "/invitations/" + uuidv4()
+        ),
+        {
+          invitedBy: profile.id,
+          sentAt: new Date().toISOString(),
+          type: "End Of Bond",
+        }
+      );
+
+      await mutationProfileFn({
+        ...profile,
+        coachId: "",
+        isBodybuildingStudent: false,
+        action: "save",
+      });
+
+      openToast({
+        isOpen: true,
+        title: "Coach removido",
+        content: "O coach foi removido com sucesso",
+        error: false,
+      });
+    } catch (error) {
+      openToast({
+        isOpen: true,
+        title: "Algo inesperado aconteceu",
+        content: "Tente novamente",
+        error: true,
+      });
+    }
+  }
+
   useEffect(() => {
     getInputsProfile();
+    getCoach();
   }, [profile]);
 
   return (
@@ -137,6 +240,43 @@ export function Profile() {
               </Text>
             )}
           </Flex>
+
+          {profile.isBodybuildingStudent && (
+            <Flex gap={"2"} direction={"column"} width={"100%"}>
+              <Text
+                size={"3"}
+                weight={"medium"}
+                style={{ color: "var(--gray-8)" }}
+              >
+                Coach
+              </Text>
+
+              <Flex justify={"between"}>
+                <Flex gap={"3"} align={"center"}>
+                  <Avatar
+                    size={"2"}
+                    src={coach?.image ?? ""}
+                    fallback={fallbackCoach}
+                    variant="solid"
+                    color="gray"
+                    radius="full"
+                  />
+
+                  <Text size={"3"} weight={"bold"}>
+                    {coach?.name}
+                  </Text>
+                </Flex>
+
+                <IconButton
+                  color="red"
+                  disabled={isEditing}
+                  onClick={removeCoach}
+                >
+                  <UserX size={16} />
+                </IconButton>
+              </Flex>
+            </Flex>
+          )}
 
           <Flex gap={"2"} direction={"column"} width={"100%"}>
             <Text

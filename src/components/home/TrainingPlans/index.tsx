@@ -181,7 +181,7 @@ export function TrainingPlans({}: TrainingPlansProps) {
 
           <IconButton
             size={"3"}
-            onClick={() => navigate("/treino/criar")}
+            onClick={() => navigate(`/treino/criar/${profile.id}`)}
             className="home-button-edit-training-mobile"
           >
             <Pencil size={16} />

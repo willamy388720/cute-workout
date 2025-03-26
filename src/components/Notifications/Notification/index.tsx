@@ -7,14 +7,14 @@ import { get, ref, remove, update } from "firebase/database";
 import { database } from "@services/firebase";
 import { useToast } from "@hooks/useToast";
 import { useEffect, useState } from "react";
-import { UserDTO } from "@dtos/userDTO";
+import { ProfileDTO } from "@dtos/profileDTO";
 
 type NotificationProps = {
   notification: NotificationDTO;
 };
 export function Notification({ notification }: NotificationProps) {
-  const [coach, setCoach] = useState<UserDTO | null>(null);
-  const { profile } = useProfile();
+  const [coach, setCoach] = useState<ProfileDTO | null>(null);
+  const { profile, mutationProfileFn } = useProfile();
   const { openToast } = useToast();
 
   const userConnected = Object.entries(profile).length > 0;
@@ -107,6 +107,13 @@ export function Notification({ notification }: NotificationProps) {
       });
 
       await removeNotification();
+
+      await mutationProfileFn({
+        ...profile,
+        coachId: notification.invitedBy,
+        isBodybuildingStudent: true,
+        action: "save",
+      });
     } catch (error) {
       openToast({
         isOpen: true,
@@ -123,7 +130,7 @@ export function Notification({ notification }: NotificationProps) {
       const coachData = await get(coachRef);
 
       if (coachData.exists()) {
-        const newCoach: UserDTO = {
+        const newCoach: ProfileDTO = {
           id: notification.invitedBy,
           email: coachData.val().email,
           name: coachData.val().name,
@@ -149,7 +156,7 @@ export function Notification({ notification }: NotificationProps) {
   }, []);
 
   return (
-    <ContainerNotification justify={"between"} align={"center"}>
+    <ContainerNotification align={"center"}>
       <Flex gap={"3"} align={"center"}>
         <Avatar
           size={"2"}

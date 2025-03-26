@@ -4,7 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { Navigate } from "react-router-dom";
 import { get, ref } from "firebase/database";
 import { Flex, Spinner } from "@radix-ui/themes";
-import { useProfile } from "@hooks/useProfile";
+import { useUser } from "@hooks/useUser";
 
 type UserRouteProps = {
   children: ReactNode;
@@ -14,7 +14,7 @@ export function UserRoute({ children }: UserRouteProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const { mutationProfileFn } = useProfile();
+  const { mutationUserFn } = useUser();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -27,17 +27,9 @@ export function UserRoute({ children }: UserRouteProps) {
           if (snapshot.exists()) {
             setIsAuthenticated(true);
 
-            await mutationProfileFn({
+            await mutationUserFn({
               id: uid,
               email: snapshot.val().email,
-              name: snapshot.val().name,
-              image: snapshot.val().image,
-              weight: snapshot.val().weight,
-              height: snapshot.val().height,
-              bodybuildingStudents: snapshot.val().bodybuildingStudents,
-              isBodybuildingStudent: snapshot.val().isBodybuildingStudent,
-              isCoaching: snapshot.val().isCoaching,
-              coachId: snapshot.val().coachId,
               action: "save",
             });
           }

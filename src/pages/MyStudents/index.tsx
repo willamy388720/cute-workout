@@ -1,13 +1,16 @@
 import {
+  AlertDialog,
+  Avatar,
   Button,
+  Card,
   Dialog,
   Flex,
+  Separator,
   Spinner,
-  Table,
   Text,
   TextField,
 } from "@radix-ui/themes";
-import { ContainerMyStudents } from "./styles";
+import { ContainerMyStudents, ContentStudents } from "./styles";
 import { useProfile } from "@hooks/useProfile";
 import { EmptySudents } from "@components/myStudents/EmptySudents";
 import { useEffect, useState } from "react";
@@ -17,9 +20,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@hooks/useToast";
 import { get, ref, set, update } from "firebase/database";
 import { database } from "@services/firebase";
-import { UserDTO } from "@dtos/userDTO";
+import { ProfileDTO } from "@dtos/profileDTO";
 import { v4 as uuidv4 } from "uuid";
-import { Mail, Pencil, X } from "lucide-react";
+import { Mail, Pencil, UserX } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const inviteStudentFormSchema = z.object({
@@ -32,7 +35,7 @@ export function MyStudents() {
   const [isLoading, setIsLoading] = useState(false);
   const [isStudentsLoading, setIsStudentsLoading] = useState(true);
   const [isStudentsDeleteLoading, setIsStudentsDeleteLoading] = useState(false);
-  const [students, setStudents] = useState<UserDTO[]>([]);
+  const [students, setStudents] = useState<ProfileDTO[]>([]);
 
   const { profile, mutationProfileFn } = useProfile();
 
@@ -78,7 +81,7 @@ export function MyStudents() {
         return;
       }
 
-      const profiles = Object.entries<UserDTO>(studentsData.val() ?? {}).map(
+      const profiles = Object.entries<ProfileDTO>(studentsData.val() ?? {}).map(
         ([id, value]) => ({
           id,
           email: value.email,
@@ -205,6 +208,10 @@ export function MyStudents() {
     }
   }
 
+  function getFallback(student: ProfileDTO) {
+    return student.name.trim() !== "" ? student.name[0].toUpperCase() : "";
+  }
+
   useEffect(() => {
     fetchStudents();
   }, [profile]);
@@ -280,7 +287,7 @@ export function MyStudents() {
           <Flex direction={"column"} width={"100%"} gap={"5"}>
             <Flex width={"100%"} justify={"between"} align={"center"}>
               <Text size={"7"} weight={"bold"}>
-                Meu Treino
+                Meus Alunos
               </Text>
 
               <Button size={"3"} onClick={() => setIsOpenModal(true)}>
@@ -288,55 +295,122 @@ export function MyStudents() {
               </Button>
             </Flex>
 
-            <div style={{ width: "100%" }}>
-              <Table.Root variant="surface" style={{ width: "100%" }}>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeaderCell>Nome</Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell>Altura (cm)</Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell>Peso (kg)</Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
-                  </Table.Row>
-                </Table.Header>
+            <ContentStudents>
+              {students.map((student) => (
+                <Card key={student.id}>
+                  <Flex
+                    align={"center"}
+                    width={"100%"}
+                    direction={"column"}
+                    gap={"3"}
+                  >
+                    <Avatar
+                      size={"6"}
+                      src={student.image ?? ""}
+                      fallback={getFallback(student)}
+                      variant="solid"
+                      color="gray"
+                      radius="full"
+                    />
 
-                <Table.Body>
-                  {students.map((student) => (
-                    <Table.Row key={student.id} align={"center"}>
-                      <Table.RowHeaderCell>{student.name}</Table.RowHeaderCell>
-                      <Table.Cell>{student.email}</Table.Cell>
-                      <Table.Cell>{student.height}</Table.Cell>
-                      <Table.Cell>{student.weight}</Table.Cell>
-                      <Table.Cell>
-                        <Flex gap={"3"} align={"end"} justify={"end"}>
+                    <Flex direction={"column"} align={"center"}>
+                      <Text size={"4"} weight={"bold"}>
+                        {student.name}
+                      </Text>
+
+                      <Text color="gray" size={"2"}>
+                        {student.email}
+                      </Text>
+                    </Flex>
+
+                    <Flex gap={"4"} align={"center"}>
+                      <Flex align={"center"} direction={"column"}>
+                        <Text size={"2"} weight={"bold"}>
+                          Peso
+                        </Text>
+
+                        <Text size={"2"} color="gray">
+                          {student.weight} kg
+                        </Text>
+                      </Flex>
+
+                      <Separator orientation={"vertical"} size={"2"} />
+
+                      <Flex align={"center"} direction={"column"}>
+                        <Text size={"2"} weight={"bold"}>
+                          Altura
+                        </Text>
+
+                        <Text size={"2"} color="gray">
+                          {student.height} cm
+                        </Text>
+                      </Flex>
+                    </Flex>
+
+                    <Flex gap={"3"} width={"100%"}>
+                      <AlertDialog.Root>
+                        <AlertDialog.Trigger>
                           <Button
-                            variant="outline"
                             color="red"
-                            onClick={() => removeStudent(student.id)}
-                            loading={isStudentsDeleteLoading}
-                            disabled={isStudentsDeleteLoading}
+                            variant="outline"
+                            style={{ flex: 1 }}
                           >
-                            <X size={16} />
+                            <UserX size={16} />
                             Remover
                           </Button>
+                        </AlertDialog.Trigger>
 
-                          <Button
-                            variant="outline"
-                            onClick={() =>
-                              navigate(`/treino/criar/${student.id}`)
-                            }
-                            disabled={isStudentsDeleteLoading}
-                          >
-                            <Pencil size={16} />
-                            Treino
-                          </Button>
-                        </Flex>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table.Root>
-            </div>
+                        <AlertDialog.Content maxWidth="450px">
+                          <AlertDialog.Title>Excluir Aluno</AlertDialog.Title>
+                          <AlertDialog.Description size="2">
+                            Tem certeza que deseja remover o {student.name}?
+                            Essa ação não pode ser desfeita.
+                          </AlertDialog.Description>
+
+                          <Flex gap="3" mt="4" justify="end">
+                            <AlertDialog.Cancel
+                              disabled={isStudentsDeleteLoading}
+                            >
+                              <Button
+                                variant="soft"
+                                color="gray"
+                                disabled={isStudentsDeleteLoading}
+                                loading={isStudentsDeleteLoading}
+                              >
+                                Cancelar
+                              </Button>
+                            </AlertDialog.Cancel>
+
+                            <AlertDialog.Action
+                              onClick={() => removeStudent(student.id)}
+                              disabled={isStudentsDeleteLoading}
+                            >
+                              <Button
+                                variant="solid"
+                                color="red"
+                                disabled={isStudentsDeleteLoading}
+                                loading={isStudentsDeleteLoading}
+                              >
+                                Remover aluno
+                              </Button>
+                            </AlertDialog.Action>
+                          </Flex>
+                        </AlertDialog.Content>
+                      </AlertDialog.Root>
+
+                      <Button
+                        variant="outline"
+                        style={{ flex: 1 }}
+                        onClick={() => navigate(`/treino/criar/${student.id}`)}
+                      >
+                        <Pencil size={16} />
+                        Treino
+                      </Button>
+                    </Flex>
+                  </Flex>
+                </Card>
+              ))}
+            </ContentStudents>
           </Flex>
         )}
       </ContainerMyStudents>

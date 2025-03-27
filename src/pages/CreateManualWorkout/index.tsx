@@ -351,6 +351,7 @@ export function CreateManualWorkout() {
     };
 
     setValue("repetitions", exercise.repetitions);
+    setValue("observation", exercise.observation);
     setSelectedExercise(exerciseEditing);
     setIsEditingExercise(true);
 
@@ -410,8 +411,6 @@ export function CreateManualWorkout() {
       });
     }
   }
-
-  console.log(primaryMuscles);
 
   return (
     <Dialog.Root>

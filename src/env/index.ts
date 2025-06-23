@@ -10,7 +10,6 @@ const envSchema = z.object({
   API_ID: z.string(),
   DATABASE_URL_DEVELOPMENT: z.string(),
   DATABASE_URL_PRODUCTION: z.string(),
-  URL_SHEETS: z.string(),
   N8N_URL: z.string(),
 });
 

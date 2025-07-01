@@ -1,50 +1,103 @@
-# React + TypeScript + Vite
+# 🏋️‍♂️ Cute Workout
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Cute Workout** é um sistema completo de treino personalizado que ajuda usuários a planejar, acompanhar e gerenciar suas rotinas de exercícios. Ideal para quem busca organização, motivação e controle detalhado dos treinos.
 
-Currently, two official plugins are available:
+## ✨ Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ Criação e edição de planos de treino personalizados
+- ✅ Acompanhamento de séries, repetições e cargas
+- ✅ Visualização do histórico e progresso
+- ✅ Sincronização de dados em tempo real via Firebase
+- ✅ Interface intuitiva, responsiva e amigável
 
-## Expanding the ESLint configuration
+## 🧪 Tecnologias utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **React** – Interface rápida e interativa
+- **TypeScript** – Tipagem estática para segurança e escalabilidade
+- **Firebase** – Autenticação e banco de dados em tempo real
+- **Radix UI** – para componentes acessíveis e design de temas
+- **Styled-Components** – Estilos modularizados e tema escuro
+- **Vite** – Build e servidor de desenvolvimento ultrarrápido
 
-- Configure the top-level `parserOptions` property like this:
+## 🚀 Como rodar o projeto localmente
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-usuario/cute-workout.git
+cd cute-workout
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 2. Instale as dependências
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+### 3. Configure suas variáveis de ambiente
+
+Crie um arquivo .env na raiz do projeto com as variáveis:
+
+# Define o ambiente (dev ou production)
+
+```env
+WEB_ENV=dev
+```
+
+# Firebase
+
+```env
+API_KEY=XXXXXXXXXXXXXXXXXXXXXXXX
+AUTH_DOMAIN=seu-projeto.firebaseapp.com
+PROJECT_ID=seu-projeto
+STORAGE_BUCKET=seu-projeto.appspot.com
+MESSAGING_SENDER_ID=XXXXXXXXXXXX
+API_ID=1:XXXXXXXXXXXX:web:XXXXXXXXXXXXXXXX
+MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+# URLs do Firebase Realtime Database
+
+```env
+DATABASE_URL_DEVELOPMENT=https://seu-projeto.firebaseio.com
+DATABASE_URL_PRODUCTION=https://seu-projeto.firebaseio.com
+```
+
+# N8N URL
+
+```env
+N8N_URL=https://seu-projeto/webhook
+```
+
+### 4. Inicie o servidor local
+
+```bash
+npm run dev
+```
+
+Acesse http://localhost:5173/ no navegador para ver o projeto em ação.
+
+## 📦 Estrutura do projeto
+
+```bash
+src/
+├── assets/          # Imagens, ícones e mídias
+├── components/      # Componentes reutilizáveis
+├── contexts/        # Contextos React para estado global
+├── dtos/            # Data Transfer Objects e tipos
+├── env/             # Configurações e variáveis de ambiente
+├── hooks/           # Hooks personalizados
+├── libs/            # Configuração de libs genéricas
+├── pages/           # Páginas principais
+├── routes/          # Configuração das rotas
+├── styles/          # Estilos globais
+├── themes/          # Configurações de tema (Radix UI cores)
+├── utils/           # Funções auxiliares
+└── @types/          # Declarações de tipos TypeScript
+```
+
+## 📌 Observações
+
+- O projeto usa Radix UI para componentes acessíveis e controle avançado de temas e cores, configurados na pasta themes/.
+
+- Todos os dados são salvos na nuvem com Firebase.

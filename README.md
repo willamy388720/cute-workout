@@ -5,10 +5,15 @@
 ## ✨ Funcionalidades
 
 - ✅ Criação e edição de planos de treino personalizados
+- ✅ Integração com IA via webhook no n8n
 - ✅ Acompanhamento de séries, repetições e cargas
 - ✅ Visualização do histórico e progresso
 - ✅ Sincronização de dados em tempo real via Firebase
 - ✅ Interface intuitiva, responsiva e amigável
+
+## 🤖 Integração com IA
+
+Através de um fluxo no **n8n**, o sistema envia os dados do usuário via **webhook**, que utiliza IA para gerar um plano de treino personalizado com base em objetivos, nível e preferências. A resposta é integrada diretamente no app de forma automática.
 
 ## 🧪 Tecnologias utilizadas
 
@@ -18,6 +23,7 @@
 - **Radix UI** – para componentes acessíveis e design de temas
 - **Styled-Components** – Estilos modularizados e tema escuro
 - **Vite** – Build e servidor de desenvolvimento ultrarrápido
+- **n8n** – automação de fluxo e integração com IA
 
 ## 🚀 Como rodar o projeto localmente
 
